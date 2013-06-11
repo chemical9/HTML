@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+
+<script>
+///for randomizing array
+function shuffle(o){ //v1.0
+    for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+};
+
+var myArray = ['1','2','3','4','5','6','7','8','9'];
+newArray = shuffle(myArray);
+
+alert(newArray);
+
+
+
+
+
+//////////////////////////	gets label as array
+//var labels = ContentTimeline.getLabelsArray();
+//for (var i = 0; i < labels.length; i++) {
+   // alert("label name: " + labels[i].name + ", time: " + labels[i].time); //or in JS, console.log("label name: " + labels[i].name + ", time: " + labels[i].time);
+//}
+///////////////////////////////
+
+</script>
+</head>
+
+<body>
+</body>
+</html>

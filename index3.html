@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width" />
+<title>HNTB Advantage®</title>
+<link href="css/advantageStyle.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/TimelineMax.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/TweenMax.min.js"></script>
+<script>
+
+$(document).ready(function() {
+
+ $("#start").click(function(){
+				BuildMenu2();
+ 			 } 
+  );
+var myMenuItems = 9; //sets how many menu items there are for the BuildMenu2 function loop
+var myIconScale = .6; //scale valu of icons
+var MyrandomVal = 0;
+var MyrandomVal2 = 0;
+var MySubPages = 4;
+var myContent =0;
+var myClick = 0;
+var myTarget = null;
+var nextClicked = 0;
+var myIndex = 0;
+var myPastTarge = null;
+
+var myArray=new Array("#focusContent0","#focusContent1","#focusContent2");
+
+TweenMax.set("#container", {perspective:200});
+
+var MainTimeline = new TimelineMax({});	
+
+
+MainTimeline.to(".mainIcon",0, {scale:myIconScale,autoAlpha:0},0.5);//sets the initial scale value so all icons fit
+TweenMax.to(".contentSlides",0, {scale:myIconScale,autoAlpha:0},0.5);
+TweenMax.to(".leftColumn",0, {transformPerspective:500,transformOrigin:"50px 0px",scale:1,rotationX:-80});
+
+var ContentTimeline = new TimelineMax({paused:true});
+
+
+function RandomVarGenerator(){
+MyrandomVal = Math.floor(Math.random() * 2048) - 1048;
+MyrandomVal2 = Math.floor(Math.random() * 800) - 400;
+};
+
+
+//this is the function that animates the menu into place
+function BuildMenu2(){
+	for (var i=0; i<myMenuItems; i++)
+				{RandomVarGenerator();
+				 var myDelay = i/5;
+//3d rotate fly in
+TweenMax.from(".box"+i,1, {left:MyrandomVal, top:MyrandomVal2, delay: myDelay - myDelay/2, scale:.3, rotationY:-90,ease:Power4.easeOut});
+TweenMax.to(".box"+i,1, {autoAlpha:1,delay: myDelay - myDelay/2,ease:Power4.easeOut});
+//bubble in
+//TweenMax.from(".box"+i,1.5, {scale:0,delay: myDelay - myDelay/2, ease:Bounce.easeOut});
+//flip in
+//TweenMax.from(".box"+i,.5, {scale:0,rotationX:360,delay: myDelay - myDelay/2,});
+//corner in
+//TweenMax.from(".box"+i,.5, {scale:0,top:0,left:0,autoAlpha:0,delay: myDelay - myDelay/2,});
+}
+};
+
+//////alternate build menu function that does not use loop but stagger... here just to give options////////////////////////////////////////////
+function BuildMenu(){
+var MyrandomVal2 = Math.floor(Math.random() * 800) - 400;
+MainTimeline.staggerFrom(".mainIcon",.5, {top:MyrandomVal2,autoAlpha:0,scale:.3,rotationY:-90,rotationX:-45,ease:Power4.easeOut,},0.1);
+};
+//////END alternate build menu function////////////////////////////////////////////
+//////////////END MENU BUILD///////////////////////////////////////////////////////
+
+
+///main click function is here/////////////////////////////////////////////////////
+$(".mainIcon").css( 'cursor', 'pointer' ).bind('click', function(e){
+	$(this).addClass("Selected");
+	$(this).removeClass("NotSelected");
+	TweenMax.to(".Selected",.75,{scale:.75, left:25, top:100,ease:Power4.easeOut});
+	RandomVarGenerator();
+	//NON SELECTED ANIMATE OUT///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	MainTimeline.staggerTo(".NotSelected",.3,{left:"+=100",scale:.3, rotationY:45, autoAlpha:0, ease:Power4.easeOut},0.1);
+	myContent = "#"+this.id+"Content";//this grabs the ID of what is clicked and is used in function animateContent//////////////////////////
+
+});
+$(".mainIcon").hover(
+  function () {
+	$(this).find('.iconText').addClass("iconTextOvr");
+    //$(".iconText").addClass("iconTextOvr");
+	//var myTarget =$(this);
+	//TweenMax.to(myTarget,.2,{scale:"+=.06"});
+  },
+  function () {  
+    $(".iconText").removeClass("iconTextOvr");
+	//var myTarget =$(this);
+	//TweenMax.to(myTarget,.2,{scale:myIconScale,transformOrigin:"center"});	
+  }
+);
+
+
+
+///END main click function is here/////////////////////////////////////////////////////
+////CONTENT MOVER/////////////////////////////////////
+
+
+		
+ 		 $("#play").click(function(){
+					var MainContentTimeline = new TimelineMax({});
+					//MainContentTimeline.staggerTo(myArray[1], 1, {left:0,autoAlpha:1, ease:CubicIn.ease}, 0.2);
+					MainContentTimeline.appendMultiple([
+					TweenMax.staggerTo(myArray,.5,{autoAlpha:.5,left:0,scale:.5,ease:Power4.easeOut}, 0.2),
+					TweenMax.staggerTo(myArray,.5,{autoAlpha:1,scale:1,ease:Power4.easeOut,delay:.5,onComplete:this.pause()}, 0.2),
+					]);
+			function myPause(){
+				MainContentTimeline.pause();
+
+			}
+ 			 }); 
+
+ 		$("#back").click(function(){
+			//myClick--;
+						if (nextClicked>=2){
+				TweenMax.to(myPrevTarget,.5,{autoAlpha:.5,scale:.5,ease:Power4.easeOut});
+				TweenMax.to(myPrevTarget,.5,{left:1024,ease:Power4.easeOut, delay:.25});	
+				myClick--;
+				TweenMax.to(myPastTarget,.5,{autoAlpha:.5,left:0,scale:.5,ease:Power4.easeOut,delay:.25 });	
+				TweenMax.to(myPastTarget,.5,{autoAlpha:1,scale:1,ease:Power4.easeOut,delay:.75});
+				nextClicked--;
+				myPrevTarget = myPastTarget;
+				}
+
+				
+				//TweenMax.to(".leftColumn",.5,{rotationX:0,scale:1,transformOrigin:"50px 0px",ease:Bounce.easeOut});
+
+				//myPrevTarget = myContent + myClick;
+				
+				//nextClicked = 1;
+
+
+ 	
+ 			 } );
+
+
+
+//function moveSlide(){
+
+
+//ContentTimeline.tweenTo( ContentTimeline.getLabelAfter() );
+
+
+
+  
+
+//rotationX:10,transformOrigin:"50px 20px", x:10, y:0, z:-200,transformPerspective:0,
+function contentflipClose(){ TweenMax.to(".leftColumn",.5,{transformPerspective:500,transformOrigin:"50px 0px",scale:1,rotationX:-80});}
+function contentflip(){ TweenMax.to(".leftColumn",.5,{rotationX:0,scale:1,transformOrigin:"50px 0px",ease:Bounce.easeOut});}
+
+
+
+
+
+
+
+
+});
+
+
+</script>
+
+<!-- 1024 -->
+<link href="css/1024.css" rel="stylesheet" type="text/css" media="only screen and (max-width:1040px)" />
+</head>
+
+<body>
+<div id="container">
+<!-- Menu -->
+<div id="focus" class="mainIcon box0 NotSelected">
+	<div class="iconText">
+	Focus on Long-Term National Contractor Partner Relationships
+	</div>
+</div>
+
+<div id="build" class="mainIcon box1 NotSelected">
+	<div class="iconText">
+	Build Project Teams in the Right Environment 
+	</div>
+</div>
+
+<div id="pursue" class="mainIcon box2 NotSelected">
+	<div class="iconText">
+	Pursue the Right Projects and Win More
+	</div>
+</div>
+
+<div id="establish" class="mainIcon box3 NotSelected">
+	<div class="iconText">
+	Establish and Execute an HNTB Advantage&reg; Staffing Program
+	</div>
+</div>
+
+<div id="discover" class="mainIcon box4 NotSelected">
+	<div class="iconText">
+	Discover and Deliver what Contractors Value
+	</div>
+</div>
+
+<div id="knowledge" class="mainIcon box5 NotSelected">
+	<div class="iconText">
+	Knowledge Transfer Program
+	</div>
+</div>
+
+<div id="deliver" class="mainIcon box6 NotSelected">
+	<div class="iconText">
+	Deliver the HNTB Advantage&reg; Each and <br />
+	Every Time </div>
+</div>
+
+<div id="bring" class="mainIcon box7 NotSelected">
+	<div class="iconText">
+	Bring Innovative Solutions, Approaches, and Tools
+	</div>
+</div>
+
+<div id="utilize" class="mainIcon box8 NotSelected">
+	<div class="iconText">
+	Utilize Enterprise-wide Sophisticated HNTB Advantage&reg; Business Practices
+	</div>
+</div>
+
+<!-- end Menu -->
+
+
+<div id="focusContent0" class="contentSlides">
+<div class="leftColumn"><img src="images/slide1_imgB.jpg" width="188" height="316" /></div>
+<div class="rightColumn"><img src="images/slide1_imgA.jpg" width="724" height="468" /></div>
+
+</div>
+
+<div id="focusContent1" class="contentSlides">
+<div class="leftColumn">slide2</div>
+<div class="rightColumn"><img src="images/slide1_imgA.jpg" width="724" height="468" /></div>
+</div>
+
+<div id="focusContent2" class="contentSlides">
+<h1>focus 2</h1>
+</div>
+
+<div id="buildContent0" class="contentSlides">
+<h1>build 0</h1>
+</div>
+
+<div id="buildContent1" class="contentSlides">
+<h1>build 1</h1>
+</div>
+
+<div id="buildContent2" class="contentSlides">
+<h1>build 2</h1>
+</div>
+
+
+<div id="play">>></div>
+<div id="back"><<</div>
+
+<div id="start">start</div>
+</div>
+
+</body>
+</html>
